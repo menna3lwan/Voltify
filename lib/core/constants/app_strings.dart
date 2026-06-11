@@ -23,6 +23,12 @@ abstract final class AppStrings {
   static const String createAccountButton = 'Create Account';
   static const String alreadyHaveAccount = 'Already have an account? ';
   static const String signIn = 'Sign In';
+  static const String signInButton = 'Sign In';
+  static const String dontHaveAccount = 'Don\'t have an account? ';
+
+  // ──── Sign In Screen ────
+  static const String signInTitle = 'Welcome Back';
+  static const String signInSubtitle = 'Sign in to your Voltify account';
 
   // ──── Validation Messages ────
   static const String fieldRequired = 'This field is required';
