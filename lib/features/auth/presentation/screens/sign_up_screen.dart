@@ -6,11 +6,15 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../home/presentation/screens/home_screen.dart';
+import '../../../../injection_container.dart';
+import '../cubit/sign_in_cubit.dart';
 import '../cubit/sign_up_cubit.dart';
 import '../cubit/sign_up_state.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/sign_up_header.dart';
+import 'sign_in_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -217,7 +221,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         GestureDetector(
           onTap: () {
-            // Navigate to Sign In screen (not in scope).
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (_) => sl<SignInCubit>(),
+                  child: const SignInScreen(),
+                ),
+              ),
+            );
           },
           child: Text(
             AppStrings.signIn,
@@ -229,11 +240,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _handleStateChanges(BuildContext context, SignUpState state) {
-    if (state.isSuccess) {
-      _showSnackBar(
-        message: AppStrings.signUpSuccess,
-        isError: false,
+    if (state.isSuccess && state.user != null) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => HomeScreen(user: state.user!),
+        ),
+        (_) => false,
       );
+      return;
     } else if (state.isFailure && state.errorMessage != null) {
       _showSnackBar(
         message: state.errorMessage!,
